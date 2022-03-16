@@ -1,0 +1,11 @@
+{% extends 'main.html' %}
+{% block title %}Поиск{% endblock %}
+
+{% block body %}
+{% for user in users %}
+<a href="{% url 'profile' user.id %}">
+    <button class="btn btn-outline-dark mt-2">{{ user.first_name }} {{ user.last_name }} | {{ user.username }}</button>
+</a>
+<br>
+{% endfor %}
+{% endblock %}

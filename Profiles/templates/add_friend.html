@@ -1,0 +1,11 @@
+{% extends 'main.html' %}
+
+{% block title %}1{% endblock %}
+
+{% block body %}
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-dark">Теперь ты мой друг!</button>
+</form>
+{% endblock %}

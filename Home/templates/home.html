@@ -1,0 +1,22 @@
+{% extends 'main.html' %}
+
+{% block title %}Домашняя страница{% endblock %}
+
+
+{% block body %}
+{% for post in posts %}
+
+<div class="card mb-3 col-offset-center mt-2" style="width: 750px; height: auto; margin-left: auto; margin-right: auto">
+  <img src="{{ post.image.url }}" style="max-height: 410px;" class="card-img-top" alt="...">
+  <div class="card-body">
+    <h5 class="card-title">{{ post.title }}</h5>
+    <p class="card-text">{{ post.text|linebreaks }}</p>
+      <a href="{% url 'profile' post.creator.id %}" class="card-link">{{ post.creator }}</a><br>
+        <a href="{% url 'local_detail' post.id %}" class="btn btn-primary">Читать</a>
+    <p class="card-text"><small class="text-muted">{{ post.date }}</small></p>
+  </div>
+</div>
+
+
+{% endfor %}
+{% endblock %}

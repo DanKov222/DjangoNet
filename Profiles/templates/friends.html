@@ -1,0 +1,12 @@
+{% extends 'main.html' %}
+
+{% block title %}friends{% endblock %}
+
+{% block body %}
+{% for k in friends %}
+    {% for friend in k.friends.all %}
+        <a href="{% url 'profile' friend.id %}"><button class="btn btn-outline-dark mt-2">{{ friend.first_name }} {{ friend.last_name }} | {{ friend.username }}</button></a>
+<br>
+    {% endfor %}
+{% endfor %}
+{% endblock %}

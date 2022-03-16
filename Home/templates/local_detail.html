@@ -1,0 +1,72 @@
+{% extends 'main.html' %}
+
+{% block title %}Домашняя страница{% endblock %}
+
+
+{% block body %}
+
+<div class="row mt-2">
+    <div class="container col-mt-1">
+        <div class="col-mt-1">
+            <img src="{{ post.image.url }}" class="img-thumbnail rounded float-start" alt="..."
+                 style="width: 200px; height: 250px;">
+        </div>
+
+        {% if request.user == post.creator %}
+        <div class="btn-group">
+            <a href="{% url 'update_local_post' post.id %}">
+                <button type="submit" class="btn btn-outline-warning">Редактировать</button>
+            </a>
+            <a href="{% url 'delete_local_post' post.id %}">
+                <button type="submit" class="btn btn-outline-danger">Удалить</button>
+            </a>
+        </div>
+        {% endif %}
+
+        <div class="col-mt-offset-2">
+            <h5 class="card-title">{{ post.title }}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">{{ post.date }}</h6>
+            <p class="card-text">{{ post.text|linebreaks }}</p>
+            <a href="{% url 'profile' post.creator.id %}" class="link-secondary">Писал для вас: {{ post.creator }} </a>
+            <form action="{% url 'add_like' post.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline-secondary">Круто</button>
+            </form>
+            <h5>Понравилось: {{ likes }} пользователю</h5>
+        </div>
+
+        <div>
+            <form class="mt-5" action="{% url 'comment' post.id %}">
+                <div class="mb-3">
+                    <textarea name="text" class="form-control" id="exampleFormControlTextarea1" rows="3"
+                              placeholder="Комментарий..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-outline-success">Отправить</button>
+            </form>
+        </div>
+
+        <div class="mt-2">
+            {% for comment in comments %}
+            <div class="card mb-3" style="max-width: 450px;">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <a href="{% url 'profile' comment.user.id %}"><img src="{{ comment.user.avatar.url }}"
+                                                                           class="img-fluid rounded-start"
+                                                                           alt="..."></a>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ comment.user.username }} | {{ comment.user.first_name }}
+                                {{ comment.user.last_name }}</h5>
+                            <p class="card-text">{{ comment.text }}</p>
+                            <p class="card-text"><small class="text-muted">{{ comment.date }}</small></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

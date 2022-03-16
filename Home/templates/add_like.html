@@ -1,0 +1,11 @@
+{% extends 'main.html' %}
+
+{% block title %}Домашняя страница{% endblock %}
+
+
+{% block body %}
+        <form action="{% url 'add_like' 1 %}">
+            {% csrf_token %}
+            <button type="submit">add like</button>
+        </form>
+{% endblock %}

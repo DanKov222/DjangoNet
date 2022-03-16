@@ -1,0 +1,63 @@
+{% extends 'main.html' %}
+{% block title %}Profile{% endblock %}
+
+{% block body %}
+<div class="row mt-3">
+    <div class="container col-mt-1">
+        <div class="col-mt-1">
+            <img src="{{ profile.avatar.url }}" class="img-thumbnail rounded float-start" alt="..."
+                 style="width: 200px; height: 250px;">
+        </div>
+        <div class="col-mt-offset-2">
+            <h6>Дата последней авторизации: {{ profile.last_login }}</h6>
+            <h3 class="col-ml-offset-2">{{ profile.first_name }} {{ profile.last_name }} | {{ profile.username }}</h3>
+            <h4>Страна: {{ profile.country }}</h4>
+            <h4>Город: {{ profile.city }}</h4>
+        </div>
+    </div>
+</div>
+<div class="row mb-2">
+    {% if request.user.username == profile.username %}
+
+    <form action="{% url 'search_users_result' %}" method="get">
+        <div class="input-group flex-nowrap mb-1 mt-1" style="width: 200px">
+            <input name="q" type="text" class="form-control" placeholder="Найти пользователя" aria-label="Username"
+                   aria-describedby="addon-wrapping">
+        </div>
+    </form>
+
+    <a href="{% url 'friend_list' request.user.id %}">
+        <button type="button" class="btn btn-outline-info" style="width: 200px">Список друзей</button>
+    </a>
+    <a href="{% url 'update_profile' profile.id %}">
+        <button type="button" class="btn btn-outline-warning">Редактировать профиль</button>
+    </a>
+    {% else %}
+    <form action="{% url 'add_friend_by_id' profile.id %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-outline-info" style="width: 200px">Добавить друга</button>
+    </form>
+    {% endif %}
+</div>
+<h6>Публикации</h6>
+{% for post in profile.localpost_set.all %}
+<div class="row">
+    <div class="card mb-3 ml-3" style="width: 800px; height: auto; margin-right: auto;">
+        <div class="row g-0">
+            <div class="col-md-4">
+                <a href="{% url 'local_detail' post.id %}"><img src="{{ post.image.url }}"
+                                                                class="img-fluid rounded-start" alt="..."></a>
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <a href="{% url 'local_detail' post.id %}" style="text-decoration: none; color: black"><h5
+                            class="card-title">{{ post.title }}</h5></a>
+                    <p class="card-text">{{ post.text }}</p>
+                    <p class="card-text"><small class="text-muted">{{ post.date }}</small></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}

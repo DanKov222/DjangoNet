@@ -1,0 +1,15 @@
+{% extends 'main.html' %}
+
+{% block title %}Создать публикацию{% endblock %}
+
+{% block body %}
+
+<div class="row">
+    <form action="" method="post">
+        {% csrf_token %}
+      <p>Вы точно хотите удалить эту публикацию?</p>
+      <input type="submit" value="Confirm" />
+    </form>
+</div>
+
+{% endblock %}

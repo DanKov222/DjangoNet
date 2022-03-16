@@ -1,0 +1,25 @@
+{% extends 'main.html' %}
+
+{% block title %}Создать публикацию{% endblock %}
+
+{% block body %}
+<div class="container col-7 mt-4">
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="inputGroup-sizing-default">Заголовок</span>
+            <input name="title" type="text" class="form-control" aria-label="Sizing example input"
+                   aria-describedby="inputGroup-sizing-default" value="{{ post.title }}">
+        </div>
+        <div class="mb-3">
+            <label for="exampleFormControlTextarea1" class="form-label">О чем хотите рассказать сегодня?</label>
+            <textarea name="text" class="form-control" id="exampleFormControlTextarea1" rows="3" >{{ post.text }}</textarea>
+        </div>
+        <div class="input-group mb-3">
+            <input name="image" type="file" class="form-control" id="inputGroupFile01" value="{{ post.image }}">
+        </div>
+        <button type="submit" class="btn btn-dark">Пуск!</button>
+    </form>
+</div>
+
+{% endblock %}
