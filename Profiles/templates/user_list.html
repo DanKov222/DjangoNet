@@ -1,0 +1,35 @@
+{% extends 'main.html' %}
+{% block title %}Profile{% endblock %}
+
+{% block body %}
+
+<form action="{% url 'search_users_result' %}" method="get">
+    <div class="input-group flex-nowrap mb-1 mt-2" style="width: 550px">
+        <input name="q" type="text" class="form-control" placeholder="Найти пользователя" aria-label="Username"
+               aria-describedby="addon-wrapping">
+        <button type="submit" class="btn btn-outline-success">Найти</button>
+    </div>
+</form>
+
+{% for profile in profiles %}
+<div class="card mb-2 mt-2" style="max-width: 550px;">
+    <div class="row g-0">
+        <div class="col-md-4">
+            <a href="{% url 'profile' profile.id %}"><img src="{{ profile.avatar.url }}"
+                                                          class="img-fluid rounded-start"
+                                                          alt="..."></a>
+        </div>
+        <div class="col-md-8">
+            <div class="card-body">
+                <h6>Дата последней авторизации: {{ profile.last_login }}</h6>
+                <h3 class="col-ml-offset-2">{{ profile.first_name }} {{ profile.last_name }} |
+                    {{ profile.username }}</h3>
+                <h4>Страна: {{ profile.country }}</h4>
+                <h4>Город: {{ profile.city }}</h4>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+{% endblock %}

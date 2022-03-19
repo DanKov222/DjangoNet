@@ -3,8 +3,9 @@
 {% block title %}Update{% endblock %}
 
 {% block body %}
-<form>
+<form method="post">
     {% csrf_token %}
     {{ form.as_p }}
+    <button type="submit" class="btn btn-outline-success">Обновить</button>
 </form>
 {% endblock %}

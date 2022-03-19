@@ -12,5 +12,6 @@ urlpatterns = [
     path('friends/<int:user_id>', friend_list, name='friend_list'),
     path('update/profile/<int:pk>', UpdateProfile.as_view(), name='update_profile'),
 
-    path('search/users/', SearchFriends.as_view(), name='search_users_result')
+    path('search/users/', SearchFriends.as_view(), name='search_users_result'),
+    path('users/', UserList.as_view(), name='user_list')
 ]

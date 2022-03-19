@@ -74,6 +74,12 @@ class SearchFriends(ListView):
 
     def get_queryset(self):
         query = self.request.GET.get("q")
-        users = Profile.objects.filter(Q(username__icontains=query) | Q(first_name__icontains=query) | Q(last_name__icontains=query))
+        users = Profile.objects.filter(
+            Q(username__icontains=query) | Q(first_name__icontains=query) | Q(last_name__icontains=query))
         return users
 
+
+class UserList(ListView):
+    model = Profile
+    template_name = 'user_list.html'
+    context_object_name = 'profiles'
