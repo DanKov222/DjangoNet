@@ -43,6 +43,9 @@ INSTALLED_APPS = [
 
     'Profiles',
     'Home',
+    'Messenger',
+
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -74,6 +77,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'SocialNetwork.wsgi.application'
+ASGI_APPLICATION = "SocialNetwork.asgi.application"
 
 
 # Database
@@ -85,6 +89,7 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
 
 
 # Password validation

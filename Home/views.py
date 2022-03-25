@@ -1,15 +1,15 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.core.exceptions import ObjectDoesNotExist
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.views import View
 from django.views.generic import CreateView, DetailView, ListView, UpdateView, DeleteView
 
 from .models import *
 
 
 class CreateLocalPost(LoginRequiredMixin, CreateView):
+    """Создание публикации"""
     template_name = 'create_local_post.html'
     model = LocalPost
     fields = ('title', 'text', 'image')
@@ -21,19 +21,22 @@ class CreateLocalPost(LoginRequiredMixin, CreateView):
 
 
 class UpdateLocalPost(UpdateView, LoginRequiredMixin):
+    """Редактирование публикации"""
     template_name = 'update_local_post.html'
     model = LocalPost
     fields = ('title', 'text', 'image')
     context_object_name = 'post'
 
 
-class DeleteLocalPost(DeleteView):
+class DeleteLocalPost(DeleteView, LoginRequiredMixin):
+    """Удаление публикации"""
     model = LocalPost
     template_name = 'delete_local_post.html'
     success_url = reverse_lazy('home')
 
 
 class Home(ListView):
+    """Представление домашней страницы"""
     template_name = 'home.html'
     model = LocalPost
     context_object_name = 'posts'
@@ -48,26 +51,28 @@ def add_like(request, post_id):
             like = Like.objects.get(user=request.user, post=LocalPost.objects.get(id=post_id))
             like.delete()
             return redirect('local_detail', post_id)
-    except:
+    except ObjectDoesNotExist:
         like = Like.objects.create(user=request.user, post=LocalPost.objects.get(id=post_id))
         like.save()
         return redirect('local_detail', post_id)
 
 
 class DetailLocalPost(DetailView):
+    """Представление публикации"""
     model = LocalPost
     template_name = 'local_detail.html'
     context_object_name = 'post'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # В шаблоне внешнего интерфейса вы можете использовать переменную name_list
         context['likes'] = Like.objects.filter(post=self.object.id).count()
         context['comments'] = Comments.objects.filter(post=self.object.id)
         return context
 
 
+@login_required
 def add_comment(request, post_id):
+    """Костыльное добавление комментария"""
     user = request.user
     text = request.GET.get('text')
     post = LocalPost.objects.get(id=post_id)

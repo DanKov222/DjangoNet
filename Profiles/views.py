@@ -1,23 +1,22 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
-from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from django.views import View
 from django.views.generic import CreateView, DetailView, UpdateView, ListView
 
 from .models import *
 from .forms import CreateProfileForm
 
 
-class SelfProfile(DetailView):
+class SelfProfile(LoginRequiredMixin, DetailView):
     """Профиль пользователя"""
     template_name = 'profile.html'
     model = Profile
 
 
-class UpdateProfile(UpdateView):
+class UpdateProfile(LoginRequiredMixin, UpdateView):
+    """Редактирование профиля"""
     model = Profile
     template_name = 'update_profile.html'
     fields = ('username', 'first_name', 'last_name', 'city', 'country', 'avatar')
@@ -26,6 +25,7 @@ class UpdateProfile(UpdateView):
 
 
 def register(request):
+    """Регистрация нового пользователя"""
     if request.method == 'POST':
         user_form = CreateProfileForm(request.POST, request.FILES)
         if user_form.is_valid():
@@ -39,6 +39,7 @@ def register(request):
 
 
 class AddFriend(LoginRequiredMixin, CreateView):
+    """Добавление пользователя в друзья"""
     model = FriendList
     template_name = 'add_friend.html'
     fields = ['friends']
@@ -68,6 +69,7 @@ def friend_list(request, user_id):
 
 
 class SearchFriends(ListView):
+    """Поиск пользователей"""
     model = Profile
     template_name = 'search_users.html'
     context_object_name = 'users'
@@ -80,6 +82,7 @@ class SearchFriends(ListView):
 
 
 class UserList(ListView):
+    """Список пользователей"""
     model = Profile
     template_name = 'user_list.html'
     context_object_name = 'profiles'

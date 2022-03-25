@@ -23,6 +23,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('profile/', include('Profiles.urls')),
     path('home/', include('Home.urls')),
+
+    path('chat/', include('Messenger.urls'))
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,
